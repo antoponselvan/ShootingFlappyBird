@@ -17,8 +17,12 @@ h1{
 .container_game {
   width: 80%;
   height: 100%;
-  border-width: 2px;
+  border-width: 1px;
   border-style: solid;
+  padding: 0px;
+  margin: 0px 0px;
+  background-color: rgb(165, 188, 223);
+  position:relative;
   /* position: absolute; */
 }
 .container_controls {
@@ -42,10 +46,11 @@ h1{
   /* top: 50%; */
 }
 .rock {
-  position: relative;
+  position: absolute;
   background-color: brown;
   width: 5%;
-  height: 20%;
-  left: 75%;
-  top: 50%;
+  height: 5%;
+  margin-top: 0px;
+  margin-left: 0px;
+  border:1px solid
 }
