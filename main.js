@@ -8,13 +8,12 @@ game.score = 0;
 game.birdAlive = true;
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
 game.sfb_dnDelta = 1; // sfb position Dec with Down arrow use
-game.refreshRate = 100; // Movemenent update speed
-game.genRockTimePeriod = 30;
+game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
+game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
 game.genRockTimeCount = 0;
 game.sfb_pos = [25, 50];
-// game.rock_pos = [['0%', '65%'], ['20%', '90%']]
 game.rock_pos = [[90, 0], [75, 75]]
-game.first_render = true;
+
 
 // RENDER function (defining state of Game) ---------------------------
 const render = () => {
@@ -29,32 +28,56 @@ const render = () => {
   }
   $('#SFB').css({'left': ((game.sfb_pos[0])+"%"), 'top':(game.sfb_pos[1]+"%")})
   console.log(game.first_render);
-  if (game.first_render) {
-    const timeStep = setInterval(time_step, game.refreshRate);
-    game.first_render = false;
-  }
-  if (!(game.birdAlive)) {clearInterval(timeStep)}
-
 }
 
 // Time Step Function ----------------------------------
 const time_step = () => {
-  let rPos = game.rock_pos[0]
+  
+  // Move Rocks
   game.rock_pos.forEach( (item, idx, arr) => {
-    arr[idx][0]-=1;
+    arr[idx][0]-=game.rockMoveRate;
     if (arr[idx][0] < 0){
       arr.splice(idx,1)
     }
   })
-  game.score += 0.1
 
+  // Increment Score
+  game.score += 0.01
+
+  // Check if Game Over
+  crashCheck();
+  if (!(game.birdAlive)) {
+    clearInterval(game.timeStep);
+    gameOver();
+  }
+
+  // Generate New Rocks
   game.genRockTimeCount +=1
   if (game.genRockTimeCount > game.genRockTimePeriod){
     game.genRockTimeCount = 0;
     game.rock_pos.push([97, Math.random()*100])
   }
+
+  complexityInc();
   render();
 }
+
+//Crash Check ------------------------------------------------
+const crashCheck = () => {
+  console.log("CrashChk")
+}
+
+
+// Complexity Increase (Rock Speed & Gen Rate)-------------------
+const complexityInc = () => {
+  console.log("Complexity Inc")
+}
+
+// Game Over Display Handling ---------------------------------
+const gameOver = () => {
+  console.log("Game Over Display Change")
+}
+
 
 // Up and Down Actions ----------------------------------------------
 const sfb_up = () => {
@@ -63,8 +86,16 @@ const sfb_up = () => {
 }
 const sfb_dn = () => {
   if (game.sfb_pos[1]<97) {game.sfb_pos[1]+=1}
+  game.birdAlive = false;
   render();
 }
+
+
+// Initialize Game -----------------------------------------------------
+const Initialize = () => { 
+  game.timeStep = setInterval(time_step, 10);
+  game.birdAlive = true;
+  }
 
 
 // MAIN FUNCTION --------------------------------------------------
@@ -77,7 +108,9 @@ const main = () => {
      if ((event.code === "ArrowUp")){sfb_up()}
     if ((event.code === "ArrowDown")){sfb_dn()}
   })
-  render();
+  
+  $('#startStop').on("click", Initialize)
+  render();  
 }
 
 $(main);
