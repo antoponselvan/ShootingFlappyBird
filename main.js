@@ -8,7 +8,9 @@ game.score = 0;
 game.birdAlive = true;
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
 game.sfb_dnDelta = 1; // sfb position Dec with Down arrow use
-game.refreshRate = 100;
+game.refreshRate = 100; // Movemenent update speed
+game.genRockTimePeriod = 30;
+game.genRockTimeCount = 0;
 game.sfb_pos = [25, 50];
 // game.rock_pos = [['0%', '65%'], ['20%', '90%']]
 game.rock_pos = [[90, 0], [75, 75]]
@@ -45,6 +47,12 @@ const time_step = () => {
     }
   })
   game.score += 0.1
+
+  game.genRockTimeCount +=1
+  if (game.genRockTimeCount > game.genRockTimePeriod){
+    game.genRockTimeCount = 0;
+    game.rock_pos.push([97, Math.random()*100])
+  }
   render();
 }
 
