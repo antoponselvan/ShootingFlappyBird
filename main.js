@@ -8,11 +8,11 @@ game.score = 0;
 game.birdAlive = true;
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
 game.sfb_dnDelta = 1; // sfb position Dec with Down arrow use
-game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
-game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
+game.rockMoveRate = 0.5; // Rock speed (%screen / 0.01s)
+game.genRockTimePeriod = 100; // Total count of 0.01s before Rock Generation
 game.genRockTimeCount = 0;
 game.sfb_pos = [25, 50];
-game.rock_pos = [[90, 0], [75, 75]]
+game.rock_pos = [[90, 10], [75, 75]]
 
 
 // RENDER function (defining state of Game) ---------------------------
@@ -24,11 +24,11 @@ const render = () => {
       const $div = $('<div>').addClass('rock');
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
-      console.log($('.container_game').css("height"))
   }
   $('#SFB').css({'left': ((game.sfb_pos[0])+"%"), 'top':(game.sfb_pos[1]+"%")})
-  console.log(game.first_render);
 }
+
+
 
 // Time Step Function ----------------------------------
 const time_step = () => {
@@ -46,6 +46,7 @@ const time_step = () => {
 
   // Check if Game Over
   crashCheck();
+  
   if (!(game.birdAlive)) {
     clearInterval(game.timeStep);
     gameOver();
@@ -64,7 +65,28 @@ const time_step = () => {
 
 //Crash Check ------------------------------------------------
 const crashCheck = () => {
-  console.log("CrashChk")
+  let sfbTop = parseFloat($('#SFB').css("top"));
+  let sfbLeft = parseFloat($('#SFB').css("left"));
+  let sfbHeight = parseFloat($('#SFB').css("height"));
+  let sfbWidth = parseFloat($('#SFB').css("width"));
+
+  for (let i in game.rock_pos){
+    let rockTop = parseFloat($('.rock').eq(i).css("top"));
+    let rockLeft = parseFloat($('.rock').eq(i).css("left"));
+    let rockHeight = parseFloat($('.rock').eq(i).css("height"));
+    let rockWidth = parseFloat($('.rock').eq(i).css("width"));
+
+    let pt1Collide = ((sfbTop > rockTop) & (sfbTop < (rockTop+rockHeight)) & (sfbLeft > rockLeft) & (sfbLeft < (rockLeft+rockWidth)))
+    let pt2Collide = (((sfbTop+sfbHeight) > rockTop) & ((sfbTop+sfbHeight) < (rockTop+rockHeight)) & (sfbLeft > rockLeft) & (sfbLeft < (rockLeft+rockWidth)))
+    let pt3Collide = ((sfbTop > rockTop) & (sfbTop < (rockTop+rockHeight)) & ((sfbLeft+sfbWidth) > rockLeft) & ((sfbLeft+sfbWidth) < (rockLeft+rockWidth)))
+    let pt4Collide = (((sfbTop+sfbHeight) > rockTop) & ((sfbTop+sfbHeight) < (rockTop+rockHeight)) & ((sfbLeft+sfbWidth) > rockLeft) & ((sfbLeft+sfbWidth) < (rockLeft+rockWidth)))
+    
+    if (pt1Collide || pt2Collide || pt3Collide || pt4Collide) {
+      game.birdAlive = false;
+      gameOver();
+      return;
+    }
+  }
 }
 
 
@@ -76,6 +98,7 @@ const complexityInc = () => {
 // Game Over Display Handling ---------------------------------
 const gameOver = () => {
   console.log("Game Over Display Change")
+  $('#startStop').text("START");
 }
 
 
@@ -86,15 +109,23 @@ const sfb_up = () => {
 }
 const sfb_dn = () => {
   if (game.sfb_pos[1]<97) {game.sfb_pos[1]+=1}
-  game.birdAlive = false;
   render();
 }
 
 
 // Initialize Game -----------------------------------------------------
 const Initialize = () => { 
+
+  if (game.timeStep) {clearInterval(game.timeStep);}
   game.timeStep = setInterval(time_step, 10);
   game.birdAlive = true;
+  game.score = 0;
+  game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
+  game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
+  game.genRockTimeCount = 0;
+  game.sfb_pos = [25, 50];
+  game.rock_pos = [[90, 10], [75, 75]]
+  $('#startStop').text("RESET")
   }
 
 
