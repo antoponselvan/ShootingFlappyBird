@@ -38,7 +38,7 @@ h1{
 }
 #SFB {
   /* display: inline-flex; */
-  position: relative;
+  position: absolute;
   background-color: red;
   width: 5%;
   height: 5%;
@@ -49,8 +49,16 @@ h1{
   position: absolute;
   background-color: brown;
   width: 5%;
-  height: 30%;
+  height: 10%;
   margin-top: 0px;
   margin-left: 0px;
   border:1px solid
+}
+#missile {
+  position: absolute;
+  background-color: yellow;
+  width: 5%;
+  height: 0%;
+  left: -1%;
+  top: -1%
 }
