@@ -5,7 +5,7 @@ import $ from "jquery";
 // Main Variables defining game state
 const game = {};
 
-game.score = 0;
+game.score = 0.49;
 game.missileActive = false;
 game.birdAlive = false;
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
@@ -24,7 +24,8 @@ game.missile_posHt = [-1, -1, 0];
 
 // RENDER function (defining state of Game) ---------------------------
 const render = () => {
-  $('.rock').remove();
+
+  // Score display
   if (game.birdAlive) {
     $('#scoreHolder').text("Score: "+ Math.round(game.score))
     $('#startStop').text("RESET")
@@ -32,14 +33,37 @@ const render = () => {
     $('#scoreHolder').text("Game Over! Final Score: "+ Math.round(game.score))
     $('#startStop').text("START")
   }
+  
+  // Rock display
+  $('.rock').remove();
   let rPos = game.rock_pos[0]
   for (rPos of game.rock_pos){
       const $div = $('<div>').addClass('rock');
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }
+
+  // bird display
   $('#SFB').css({'left': ((game.sfb_pos[0])+"%"), 'top':(game.sfb_pos[1]+"%")})
   $('#missile').css({'left': ((game.missile_posHt[0])+"%"), 'top':(game.missile_posHt[1]+"%"), 'height':(game.missile_posHt[2]+"%")})
+
+  // bird animation
+  if ((game.score*10)%10 < 2.5) {$(".imgSFB").attr('src','/img/flappyBirdUp.png')}
+  else if ((game.score*10)%10 < 5) {$(".imgSFB").attr('src','/img/flappyBirdParallel.png')}
+  else if ((game.score*10)%10 < 7.5) {$(".imgSFB").attr('src','/img/flappyBirdDwn.png')}
+  else {$(".imgSFB").attr('src','/img/flappyBirdParallel.png')}
+
+  // Missile Inhibit time display
+  let missileInhbitTime = Math.round((game.genMissileTimePeriod - game.genMissileTimeCount)/100)
+  $('.missileTime').remove();
+  if (missileInhbitTime <= 0) {
+    missileInhbitTime = 0;
+    $('.button_M').children("img").attr('src','/img/imgMissileIconButton_v2.png');
+  }  
+  else {
+    $('.button_M').append($('<h3 class="missileTime">').text(missileInhbitTime));
+    $('.button_M').children("img").attr('src','/img/imgMissileIconButtonInhibit.png');
+  }
 }
 
 
@@ -67,7 +91,10 @@ const time_step = () => {
   if (game.genRockTimeCount > game.genRockTimePeriod){
     game.genRockTimeCount = 0;
     let sfbPosFrac = (parseFloat($('#SFB').css('top'))/parseFloat($('.container_game').css('height')));
-    game.rock_pos.push([97, (100*sfbPosFrac*(1 + Math.random()*0.5))-10]);
+    let rockPosFrac = sfbPosFrac +(Math.random()-0.5)*0.8;
+    if (rockPosFrac > 1) {rockPosFrac = 1;}
+    if (rockPosFrac < 0) {rockPosFrac = 0;}
+    game.rock_pos.push([97, (100*sfbPosFrac*(1 + Math.random()*0.75))-10]);
   }
 
   // Move SFB down
@@ -75,7 +102,7 @@ const time_step = () => {
   game.sfb_fallRate *= 1.03 
 
   // Increment Score
-  game.score += 0.01
+  game.score += (game.rockMoveRate)*0.1
 
   // Check if Game Over or missile Hit
   crashCheck();
@@ -151,11 +178,13 @@ const complexityInc = () => {
 
 // User Actions (Up, Down, Missile-Launch) ------------------------------------------
 const sfb_up = () => {
+  if (game.birdAlive === false) {return}
   if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=1}
   game.sfb_fallRate = 0.025;
   render();
 }
 const sfb_dn = () => {
+  if (game.birdAlive === false) {return}
   if (game.sfb_pos[1]<97) {game.sfb_pos[1]+=1}
   render();
 }
@@ -174,7 +203,7 @@ const Initialize = () => {
   if (game.timeStep) {clearInterval(game.timeStep);}
   game.timeStep = setInterval(time_step, 10);
   game.birdAlive = true;
-  game.score = 0;
+  game.score = 0.49;
   game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
   game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
   game.genRockTimeCount = 0;
@@ -186,7 +215,7 @@ const Initialize = () => {
 // MAIN FUNCTION --------------------------------------------------
 const main = () => { 
   $('#SFB').css({'top': '80%', 'left':'25%'});
-  $('.button_UP').on('click', sfb_up);
+  $('.button_UP').on('mousedown', sfb_up);
   $('.button_DN').on('click', sfb_dn);
 
   $('body').on("keydown", (event) => {
@@ -196,7 +225,7 @@ const main = () => {
   })
   
   $('#startStop').on("click", Initialize)
-  render();  
+  render();
 }
 
 $(main);
