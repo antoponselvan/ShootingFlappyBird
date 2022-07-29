@@ -58,6 +58,7 @@ const render = () => {
   let rPos = game.rock_pos[0]
   for (rPos of game.rock_pos){
       const $div = $('<div>').addClass('rock');
+      $div.append($('<img class="imgRock" src="/img/rock5.png">'))
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }

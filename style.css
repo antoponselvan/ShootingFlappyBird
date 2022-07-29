@@ -54,12 +54,13 @@ h1{
 }
 .rock {
   position: absolute;
-  background-color: brown;
-  width: 5%;
-  height: 10%;
+  width: 8%;
+  height: 16%;
   margin-top: 0px;
   margin-left: 0px;
-  border:1px solid;
+  /* background-image: url('/img/rock1.png');
+  background-size: 110% 110%;
+  background-position: center center; */
 }
 .groundRock {
   position: absolute;
@@ -88,6 +89,13 @@ img.button {
   align-self: center;  
 }
 img.imgSFB {
+  height: 120%;
+  width: 120%;
+  position: relative;
+  left: -10%;
+  top: -10%;
+}
+img.imgRock {
   height: 120%;
   width: 120%;
   position: relative;
