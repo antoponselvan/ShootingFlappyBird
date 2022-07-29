@@ -2,29 +2,42 @@ import './style.css'
 import $ from "jquery";
 // sfb = Shooting Flappy Bird
 
-// Main Variables defining game state
+// Main Variables defining game state ---------------------------------------------------------------------
 const game = {};
-
-game.score = 0;
-game.timePassed = 0;
-game.missileActive = false;
-game.birdAlive = false;
+// Programmer Tuning Varaibles
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
 game.sfb_dnDelta = 1; // sfb position Dec with Down arrow use
-game.sfb_fallRate = 0.025 // sfb speed of natural fall
 game.missileMoveRate = 0.5; // Rock speed (%screen / 0.01s)
 game.genMissileTimePeriod = 500; // Total count of 0.01s before Rock Generation
-game.genMissileTimeCount = game.genMissileTimePeriod;
-game.rockMoveRate = 0.5; // Rock speed (%screen / 0.01s)
-game.genRockTimePeriod = 50; // Total count of 0.01s before Rock Generation
-game.genRockTimeCount = 0;
-game.sfb_pos = [25, 50];
-game.rock_pos = [[90, 10], [75, 75]]
-game.grndRockStart_pos = 0;
-game.missile_posHt = [-1, -1, 0];
+
+// Initialize Game --------------------------------------------------------------------------------
+const Initialize = () => { 
+
+  if (game.timeStep) {clearInterval(game.timeStep);}
+  game.timeStep = setInterval(time_step, 10);
+  
+  // Initialize Score and time ount
+  game.score = 0;
+  game.timePassed = 0;
+
+  // Initialize position & status of items on game board (Rock, Missile, Bird)
+  game.genRockTimeCount = 0; // Cuurent count since last rock generation
+  game.genMissileTimeCount = game.genMissileTimePeriod; // Time count since last missile generated
+  game.sfb_pos = [25, 50]; // Position of Bird (left, top)
+  game.sfb_fallRate = 0.025 // sfb speed of natural fall
+  game.rock_pos = [[90, 10], [75, 75]] // Position of Rocks (left, top)
+  game.grndRockStart_pos = 0;
+  game.missile_posHt = [-1, -1, 0]; //left, top, Height
+  game.missileActive = false;
+  game.birdAlive = true;
+
+  // Initialize Complexity Level
+  game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
+  game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
+}
 
 
-// RENDER function (defining state of Game) ---------------------------
+// RENDER function (defining state of Game) ------------------------------------------------------
 const render = () => {
 
   // Score display
@@ -83,7 +96,7 @@ const render = () => {
 
 
 
-// Time Step Function ----------------------------------
+// Time Step Function ---------------------------------------------------------------------------------
 const time_step = () => {
   
   // Move Rocks
@@ -111,7 +124,6 @@ const time_step = () => {
     let rockPosFrac = sfbPosFrac +(Math.random()-0.5)*0.8;
     if (rockPosFrac > 0.9) {rockPosFrac = 0.9;}
     if (rockPosFrac < 0) {rockPosFrac = 0;}
-    // game.rock_pos.push([97, (100*sfbPosFrac*(1 + Math.random()*0.75))-10]);
     game.rock_pos.push([97, (100*rockPosFrac)]);
   }
 
@@ -133,7 +145,7 @@ const time_step = () => {
   render();
 }
 
-//SFB Crash Check ------------------------------------------------
+//SFB Crash Check ------------------------------------------------------------------
 const crashCheck = () => {
   let sfbTop = parseFloat($('#SFB').css("top"));
   let sfbLeft = parseFloat($('#SFB').css("left"));
@@ -161,7 +173,7 @@ const crashCheck = () => {
   }
 }
 
-//Missile Hit Check ------------------------------------------------
+//Missile Hit Check -------------------------------------------------------------------
 const missileHitCheck = () => {
   let missileTop = parseFloat($('#missile').css("top"));
   let missileLeft = parseFloat($('#missile').css("left"));
@@ -190,13 +202,13 @@ const missileHitCheck = () => {
   }
 }
 
-// Complexity Increase (Rock Speed & Gen Rate)-------------------
+// Complexity Increase (Rock Speed & Gen Rate)-----------------------------------------------------
 const complexityInc = () => {
-  game.rockMoveRate += 0.0001;
+  game.rockMoveRate += 0.0001*(100/(100+game.score));
   game.genRockTimePeriod -= 0.05*(100/(100+game.score));
 }
 
-// User Actions (Up, Down, Missile-Launch) ------------------------------------------
+// User Actions (Up, Down, Missile-Launch) --------------------------------------------------------
 const sfb_up = () => {
   if (game.birdAlive === false) {return}
   if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=1}
@@ -217,22 +229,6 @@ const missile_launch = () => {
 }
 
 
-// Initialize Game -----------------------------------------------------
-const Initialize = () => { 
-
-  if (game.timeStep) {clearInterval(game.timeStep);}
-  game.timeStep = setInterval(time_step, 10);
-  game.birdAlive = true;
-  game.score = 0;
-  game.timePassed = 0;
-  game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
-  game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
-  game.genRockTimeCount = 0;
-  game.sfb_pos = [25, 50];
-  game.rock_pos = [[90, 10], [75, 75]]
-  game.grndRockStart_pos = 0;
-  }
-
 
 // MAIN FUNCTION --------------------------------------------------
 const main = () => { 
@@ -246,7 +242,9 @@ const main = () => {
     if ((event.code === "ArrowRight")){missile_launch()}
   })
   
-  $('#startStop').on("click", Initialize)
+  $('#startStop').on("click", Initialize);
+  Initialize();
+  game.birdAlive = false;
   render();  
   setTimeout(() => {
     alert("Game Instructions: 1)UpArrow = Move Up   2)RightArrow = Launch Missile");

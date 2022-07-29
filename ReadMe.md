@@ -5,7 +5,7 @@ Single player game in which the user navigates the bird thru multiple obstacles 
 ## User Story / Journey
 - User to get start button
 - User Can Move Bird - Up/Down to navigate Bird from obstacles
-- User to be able to launch missiles to destroy obstacles (Optional)
+- User to be able to launch missiles to destroy obstacles (Optional). After launch, missile will be inhibited for some time.
 - If user crashes on the obstacle or on the boundaries then game ends and user sees a score
 
 
@@ -20,9 +20,10 @@ Broad list of things to show:
 ## Data
 Key Variables that defines the game state:
 1. Bird Position: x,y
-2. Total Score
-3. Obstacle Position: x, y
-4. Obstacle count
+2. Total Score & Time Passed
+3. Rock Position: x, y
+4. Ground Rock - Starting Position
+
 
 
 
