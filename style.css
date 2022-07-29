@@ -4,12 +4,15 @@ h1{
   border-style: solid;
   margin-bottom: 0px;
   margin-top: 0px;
+  background-color: rgb(123, 0, 255);
+  position: relative;
+  height: 10%;
 }
 
 .container_main {
   display: flex;
   width: 100%;
-  height: 70vh;
+  height: 85vh;
   border-width: 2px;
   border-style: solid;
 
@@ -23,8 +26,8 @@ h1{
   margin: 0px 0px;
   background-color: rgb(165, 188, 223);
   position:relative;
-  
-  
+  background-image: url('/img/background.png');
+  background-size: 100% 100%;
 }
 .container_controls {
   display: flex;
@@ -35,15 +38,16 @@ h1{
   flex-direction: column;
 }
 .game_button {
-  height: 23vh;
+  height: 28.3vh;
   font-size: xx-large;
   padding: 0px 0px;
+  z-index: 1;
 }
 #SFB {
   /* display: inline-flex; */
   position: absolute;
   background-color: rgba(0,0,0,0);
-  width: 10%;
+  width: 8%;
   height: 10%;
   left: 25%;
   /* top: 50%; */
@@ -57,10 +61,21 @@ h1{
   margin-left: 0px;
   border:1px solid;
 }
+.groundRock {
+  position: absolute;
+  background-color: brown;
+  width: 5%;
+  height: 3%;
+  bottom: 0%;
+  margin-top: 0px;
+  margin-left: 0px;
+  border:5px solid;
+}
 #missile {
   position: absolute;
   background-image: url('/img/imgMissileGame.png');
   background-size: 100% 100%;
+  background-position: bottom;
   width: 10%;
   height: 20%;
   left: -1%;
@@ -81,10 +96,10 @@ img.imgSFB {
 }
 
 button#startStop{
-  width: 13%;
-  height: 5%;
-  top: 1%;
-  position: absolute;
-  right: 1%;
+  width: auto;
+  height: auto;
   font-size: 20px;
+  float: right;
+  margin-top: 4px;
+  
 }

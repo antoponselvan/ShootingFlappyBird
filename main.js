@@ -5,7 +5,8 @@ import $ from "jquery";
 // Main Variables defining game state
 const game = {};
 
-game.score = 0.49;
+game.score = 0;
+game.timePassed = 0;
 game.missileActive = false;
 game.birdAlive = false;
 game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
@@ -19,6 +20,7 @@ game.genRockTimePeriod = 50; // Total count of 0.01s before Rock Generation
 game.genRockTimeCount = 0;
 game.sfb_pos = [25, 50];
 game.rock_pos = [[90, 10], [75, 75]]
+game.grndRockStart_pos = 0;
 game.missile_posHt = [-1, -1, 0];
 
 
@@ -28,9 +30,13 @@ const render = () => {
   // Score display
   if (game.birdAlive) {
     $('#scoreHolder').text("Score: "+ Math.round(game.score))
+    $('#scoreHolder').css("color","black")
     $('#startStop').text("RESET")
   } else {
-    $('#scoreHolder').text("Game Over! Final Score: "+ Math.round(game.score))
+    if (game.score > 0.1){
+      $('#scoreHolder').text("Game Over! Final Score: "+ Math.round(game.score))
+    }
+    $('#scoreHolder').css("color","rgb(255,250,0)")
     $('#startStop').text("START")
   }
   
@@ -64,6 +70,15 @@ const render = () => {
     $('.button_M').append($('<h3 class="missileTime">').text(missileInhbitTime));
     $('.button_M').children("img").attr('src','/img/imgMissileIconButtonInhibit.png');
   }
+
+  //Ground Rock Animation
+  let groundRockEndLeft = game.grndRockStart_pos;
+  $('.groundRock').remove();
+  while (groundRockEndLeft < 100) {
+    let $grndRock = $('<div>').addClass('groundRock').css("left", groundRockEndLeft+"%")
+    $('.container_game').append($grndRock);
+    groundRockEndLeft +=5;
+  }
 }
 
 
@@ -79,12 +94,14 @@ const time_step = () => {
     }
   })
 
+  // Move Ground Rock
+  game.grndRockStart_pos -= game.rockMoveRate;
+  if (game.grndRockStart_pos < -5) {game.grndRockStart_pos = 0}
+
   // Move Missile
   if (game.missileActive){game.missile_posHt[0] += game.missileMoveRate;}
   // if (game.genMissileTimeCount < game.genMissileTimePeriod) {game.genMissileTimeCount += 1;}
   game.genMissileTimeCount += 1;
-  console.log(game.genMissileTimeCount);
-
 
   // Generate New Rocks
   game.genRockTimeCount +=1
@@ -92,17 +109,20 @@ const time_step = () => {
     game.genRockTimeCount = 0;
     let sfbPosFrac = (parseFloat($('#SFB').css('top'))/parseFloat($('.container_game').css('height')));
     let rockPosFrac = sfbPosFrac +(Math.random()-0.5)*0.8;
-    if (rockPosFrac > 1) {rockPosFrac = 1;}
+    if (rockPosFrac > 0.9) {rockPosFrac = 0.9;}
     if (rockPosFrac < 0) {rockPosFrac = 0;}
-    game.rock_pos.push([97, (100*sfbPosFrac*(1 + Math.random()*0.75))-10]);
+    // game.rock_pos.push([97, (100*sfbPosFrac*(1 + Math.random()*0.75))-10]);
+    game.rock_pos.push([97, (100*rockPosFrac)]);
   }
 
   // Move SFB down
   game.sfb_pos[1] +=game.sfb_fallRate;
   game.sfb_fallRate *= 1.03 
 
-  // Increment Score
+  // Increment Score & Time passed
   game.score += (game.rockMoveRate)*0.1
+  game.timePassed += 0.01; // Time passed in sec
+  console.log(game.timePassed);
 
   // Check if Game Over or missile Hit
   crashCheck();
@@ -173,7 +193,7 @@ const missileHitCheck = () => {
 // Complexity Increase (Rock Speed & Gen Rate)-------------------
 const complexityInc = () => {
   game.rockMoveRate += 0.0001;
-  game.genRockTimePeriod -= 0.05;
+  game.genRockTimePeriod -= 0.05*(100/(100+game.score));
 }
 
 // User Actions (Up, Down, Missile-Launch) ------------------------------------------
@@ -203,12 +223,14 @@ const Initialize = () => {
   if (game.timeStep) {clearInterval(game.timeStep);}
   game.timeStep = setInterval(time_step, 10);
   game.birdAlive = true;
-  game.score = 0.49;
+  game.score = 0;
+  game.timePassed = 0;
   game.rockMoveRate = 0.1; // Rock speed (%screen / 0.01s)
   game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
   game.genRockTimeCount = 0;
   game.sfb_pos = [25, 50];
   game.rock_pos = [[90, 10], [75, 75]]
+  game.grndRockStart_pos = 0;
   }
 
 
@@ -225,7 +247,10 @@ const main = () => {
   })
   
   $('#startStop').on("click", Initialize)
-  render();
+  render();  
+  setTimeout(() => {
+    alert("Game Instructions: 1)UpArrow = Move Up   2)RightArrow = Launch Missile");
+  }, 1000);
 }
 
 $(main);
