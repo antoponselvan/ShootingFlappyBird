@@ -25,6 +25,7 @@ The game container screen remains constant and holds the following:
 4. Moving Rock Floor
 
 ![User Interface](/Report/SFB_User%20Interface.jpg)
+![User Interface](/Report/UserInterface.gif)
 <br></br>
 
 ## 💻 Key Variables of Program
