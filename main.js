@@ -58,7 +58,7 @@ const render = () => {
   let rPos = game.rock_pos[0]
   for (rPos of game.rock_pos){
       const $div = $('<div>').addClass('rock');
-      $div.append($('<img class="imgRock" src="./img/rock5.png">'))
+      $div.append(($('<img>').addClass("imgRock")).attr("src","./img/rock5.png"))
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }
@@ -135,7 +135,6 @@ const time_step = () => {
   // Increment Score & Time passed
   game.score += (game.rockMoveRate)*0.1
   game.timePassed += 0.01; // Time passed in sec
-  console.log(game.timePassed);
 
   // Check if Game Over or missile Hit
   crashCheck();

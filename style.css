@@ -109,7 +109,8 @@ button#startStop{
   width: auto;
   height: auto;
   font-size: 12px;
-  float: right;
-  margin-top: 4px;
+  float: left;
+  margin-top: 5px;
+  margin-left: 16px;
   
 }
