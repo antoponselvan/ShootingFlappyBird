@@ -23,10 +23,13 @@ const Initialize = () => {
 
   if (game.timeStep) {clearInterval(game.timeStep);}
   game.timeStep = setInterval(time_step, 10);
+  if (game.upButtonFn) {clearInterval(game.upButtonFn)}
+  if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn)}
   
-  // Initialize Score and time ount
+  // Initialize Score and time count
   game.score = 0;
   game.timePassed = 0;
+  game.upButtonPressed = false;
 
   // Initialize position & status of items on game board (Rock, Missile, Bird)
   game.genRockTimeCount = 0; // Cuurent count since last rock generation
@@ -102,7 +105,6 @@ const render = () => {
     groundRockEndLeft +=5;
   }
 }
-
 
 
 // Time Step Function ---------------------------------------------------------------------------------
@@ -228,11 +230,28 @@ const sfb_dn = () => {
   render();
 }
 const missile_launch = () => {
+  if (game.birdAlive === false) {return}
   if ((game.missileActive === true)||(game.genMissileTimeCount < game.genMissileTimePeriod)) {return;}
   game.missileActive = true;
   game.missile_posHt = [(game.sfb_pos[0]+5), game.sfb_pos[1], 5];
   game.genMissileTimeCount = 0;
   render();
+}
+const sfbUpButtonMouseDown = () => {
+  if (game.birdAlive === false) {return}
+  game.upButtonFn = setInterval(sfb_up, 25*game.sfb_upDelta);
+}
+const sfbUpButtonMouseOutRelease = () => {
+  if (game.birdAlive === false) {return}
+  if (game.upButtonFn) {clearInterval(game.upButtonFn);}
+}
+const sfbDwnButtonMouseDown = () => {
+  if (game.birdAlive === false) {return}
+  game.dwnButtonFn = setInterval(sfb_dn, 25*game.sfb_dnDelta);
+}
+const sfbDwnButtonMouseOutRelease = () => {
+  if (game.birdAlive === false) {return}
+  if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
 }
 
 
@@ -240,9 +259,18 @@ const missile_launch = () => {
 // MAIN FUNCTION --------------------------------------------------
 const main = () => { 
   $('#SFB').css({'top': '80%', 'left':'25%'});
-  $('.button_UP').on('mousedown', sfb_up);
-  $('.button_DN').on('click', sfb_dn);
-  $('.button_UP').on('mouseout', missile_launch)
+  $('.button_UP').on('mousedown', sfbUpButtonMouseDown);
+  $('.button_UP').on('mouseout', sfbUpButtonMouseOutRelease);  
+  $('.button_UP').on('mouseup', sfbUpButtonMouseOutRelease);
+  $('.button_UP').on('touchstart', sfbUpButtonMouseDown);
+  $('.button_UP').on('touchend', sfbUpButtonMouseOutRelease);  
+
+
+  $('.button_DN').on('mousedown', sfbDwnButtonMouseDown);
+  $('.button_DN').on('mouseout', sfbDwnButtonMouseOutRelease);  
+  $('.button_DN').on('mouseup', sfbDwnButtonMouseOutRelease);
+  
+  $('.button_M').on('click', missile_launch)
 
   $('body').on("keydown", (event) => {
     if ((event.code === "ArrowUp")){sfb_up()}
@@ -253,10 +281,7 @@ const main = () => {
   $('#startStop').on("click", Initialize);
   Initialize();
   game.birdAlive = false;
-  render();  
-  setTimeout(() => {
-    alert("Game Instructions: 1)UpArrow = Move Up   2)RightArrow = Launch Missile");
-  }, 1000);
+  render(); 
 }
 
 $(main);

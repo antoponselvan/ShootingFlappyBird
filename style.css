@@ -49,8 +49,8 @@ h1{
 #SFB {
   position: absolute;
   background-color: rgba(0,0,0,0);
-  width: 50px;
-  height: 50px;
+  width:5%;
+  min-width: 40px;
   left: 25%;
 }
 .rock {
@@ -116,4 +116,34 @@ button#startStop{
   margin-top: 5px;
   margin-left: 16px;
   
+}
+h6{
+  line-height: 1em;
+  margin: 0 0 0 16px;
+}
+li{
+  line-height: 1em;
+  margin: 0;
+}
+#orientationNotification {
+  display: none;
+}
+
+@media (max-width:800px){
+  .instruction{
+    display: none;
+  }
+}
+
+@media (orientation: portrait) {
+  .container_main {
+    display: none;
+  }
+  #scoreHolder {
+    display: none;
+  }
+  #orientationNotification {
+    display:block;
+    height: 50%;
+  }
 }
