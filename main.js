@@ -1,11 +1,19 @@
+// sfb = Shooting Flappy Bird
 import './style.css'
 import $ from "jquery";
-// sfb = Shooting Flappy Bird
+
+// Import Images - 
+import rockImg from "./img/rock5.png"
+import birdUpImg from "./img/flappyBirdUp.png"
+import birdDwnImg from "./img/flappyBirdDwn.png"
+import birdParallelImg from "./img/flappyBirdParallel.png"
+import missileInhibitImg from './img/imgMissileIconButtonInhibit.png'
+import missileActiveImg from './img/imgMissileIconButton_v2.png'
 
 // Main Variables defining game state ---------------------------------------------------------------------
 const game = {};
 // Programmer Tuning Varaibles
-game.sfb_upDelta = 1; // sfb position Inc with Up arrow use
+game.sfb_upDelta = 2; // sfb position Inc with Up arrow use
 game.sfb_dnDelta = 1; // sfb position Dec with Down arrow use
 game.missileMoveRate = 0.5; // Rock speed (%screen / 0.01s)
 game.genMissileTimePeriod = 500; // Total count of 0.01s before Rock Generation
@@ -36,7 +44,6 @@ const Initialize = () => {
   game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
 }
 
-import rockImg from "./img/rock5.png"
 
 // RENDER function (defining state of Game) ------------------------------------------------------
 const render = () => {
@@ -69,21 +76,21 @@ const render = () => {
   $('#missile').css({'left': ((game.missile_posHt[0])+"%"), 'top':(game.missile_posHt[1]+"%"), 'height':(game.missile_posHt[2]+"%")})
 
   // bird animation
-  if ((game.score*10)%10 < 2.5) {$(".imgSFB").attr('src','./img/flappyBirdUp.png')}
-  else if ((game.score*10)%10 < 5) {$(".imgSFB").attr('src','./img/flappyBirdParallel.png')}
-  else if ((game.score*10)%10 < 7.5) {$(".imgSFB").attr('src','./img/flappyBirdDwn.png')}
-  else {$(".imgSFB").attr('src','./img/flappyBirdParallel.png')}
+  if ((game.score*10)%10 < 2.5) {$(".imgSFB").attr('src',birdUpImg)}
+  else if ((game.score*10)%10 < 5) {$(".imgSFB").attr('src',birdParallelImg)}
+  else if ((game.score*10)%10 < 7.5) {$(".imgSFB").attr('src',birdDwnImg)}
+  else {$(".imgSFB").attr('src',birdParallelImg)}
 
   // Missile Inhibit time display
   let missileInhbitTime = Math.round((game.genMissileTimePeriod - game.genMissileTimeCount)/100)
   $('.missileTime').remove();
   if (missileInhbitTime <= 0) {
     missileInhbitTime = 0;
-    $('.button_M').children("img").attr('src','./img/imgMissileIconButton_v2.png');
+    $('.button_M').children("img").attr('src',missileActiveImg);
   }  
   else {
     $('.button_M').append($('<h3 class="missileTime">').text(missileInhbitTime));
-    $('.button_M').children("img").attr('src','./img/imgMissileIconButtonInhibit.png');
+    $('.button_M').children("img").attr('src',missileInhibitImg);
   }
 
   //Ground Rock Animation
@@ -115,7 +122,6 @@ const time_step = () => {
 
   // Move Missile
   if (game.missileActive){game.missile_posHt[0] += game.missileMoveRate;}
-  // if (game.genMissileTimeCount < game.genMissileTimePeriod) {game.genMissileTimeCount += 1;}
   game.genMissileTimeCount += 1;
 
   // Generate New Rocks
@@ -212,13 +218,13 @@ const complexityInc = () => {
 // User Actions (Up, Down, Missile-Launch) --------------------------------------------------------
 const sfb_up = () => {
   if (game.birdAlive === false) {return}
-  if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=2}
+  if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=game.sfb_upDelta}
   game.sfb_fallRate = 0.025;
   render();
 }
 const sfb_dn = () => {
   if (game.birdAlive === false) {return}
-  if (game.sfb_pos[1]<97) {game.sfb_pos[1]+=1}
+  if (game.sfb_pos[1]<97) {game.sfb_pos[1]+=game.sfb_dnDelta}
   render();
 }
 const missile_launch = () => {
