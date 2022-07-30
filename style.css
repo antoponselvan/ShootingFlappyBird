@@ -76,7 +76,7 @@ h1{
 }
 #missile {
   position: absolute;
-  background-image: url('/img/imgMissileGame.png');
+  background-image: url('./img/imgMissileGame.png');
   background-size: 100% 100%;
   background-position: bottom;
   width: 10%;

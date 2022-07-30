@@ -58,7 +58,7 @@ const render = () => {
   let rPos = game.rock_pos[0]
   for (rPos of game.rock_pos){
       const $div = $('<div>').addClass('rock');
-      $div.append($('<img class="imgRock" src="/img/rock5.png">'))
+      $div.append($('<img class="imgRock" src="./img/rock5.png">'))
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }
@@ -68,21 +68,21 @@ const render = () => {
   $('#missile').css({'left': ((game.missile_posHt[0])+"%"), 'top':(game.missile_posHt[1]+"%"), 'height':(game.missile_posHt[2]+"%")})
 
   // bird animation
-  if ((game.score*10)%10 < 2.5) {$(".imgSFB").attr('src','/img/flappyBirdUp.png')}
-  else if ((game.score*10)%10 < 5) {$(".imgSFB").attr('src','/img/flappyBirdParallel.png')}
-  else if ((game.score*10)%10 < 7.5) {$(".imgSFB").attr('src','/img/flappyBirdDwn.png')}
-  else {$(".imgSFB").attr('src','/img/flappyBirdParallel.png')}
+  if ((game.score*10)%10 < 2.5) {$(".imgSFB").attr('src','./img/flappyBirdUp.png')}
+  else if ((game.score*10)%10 < 5) {$(".imgSFB").attr('src','./img/flappyBirdParallel.png')}
+  else if ((game.score*10)%10 < 7.5) {$(".imgSFB").attr('src','./img/flappyBirdDwn.png')}
+  else {$(".imgSFB").attr('src','./img/flappyBirdParallel.png')}
 
   // Missile Inhibit time display
   let missileInhbitTime = Math.round((game.genMissileTimePeriod - game.genMissileTimeCount)/100)
   $('.missileTime').remove();
   if (missileInhbitTime <= 0) {
     missileInhbitTime = 0;
-    $('.button_M').children("img").attr('src','/img/imgMissileIconButton_v2.png');
+    $('.button_M').children("img").attr('src','./img/imgMissileIconButton_v2.png');
   }  
   else {
     $('.button_M').append($('<h3 class="missileTime">').text(missileInhbitTime));
-    $('.button_M').children("img").attr('src','/img/imgMissileIconButtonInhibit.png');
+    $('.button_M').children("img").attr('src','./img/imgMissileIconButtonInhibit.png');
   }
 
   //Ground Rock Animation
