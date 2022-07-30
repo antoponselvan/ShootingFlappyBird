@@ -36,6 +36,7 @@ const Initialize = () => {
   game.genRockTimePeriod = 300; // Total count of 0.01s before Rock Generation
 }
 
+import rockImg from "./img/rock5.png"
 
 // RENDER function (defining state of Game) ------------------------------------------------------
 const render = () => {
@@ -58,7 +59,7 @@ const render = () => {
   let rPos = game.rock_pos[0]
   for (rPos of game.rock_pos){
       const $div = $('<div>').addClass('rock');
-      $div.append(($('<img>').addClass("imgRock")).attr("src","./img/rock5.png"))
+      $div.append(($('<img>').addClass("imgRock")).attr("src",rockImg))
       $('.container_game').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }
