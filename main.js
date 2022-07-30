@@ -43,7 +43,7 @@ const render = () => {
   // Score display
   if (game.birdAlive) {
     $('#scoreHolder').text("Score: "+ Math.round(game.score))
-    $('#scoreHolder').css("color","black")
+    $('#scoreHolder').css("color","white")
     $('#startStop').text("RESET")
   } else {
     if (game.score > 0.1){
@@ -212,7 +212,7 @@ const complexityInc = () => {
 // User Actions (Up, Down, Missile-Launch) --------------------------------------------------------
 const sfb_up = () => {
   if (game.birdAlive === false) {return}
-  if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=1}
+  if (game.sfb_pos[1]>0) {game.sfb_pos[1]-=2}
   game.sfb_fallRate = 0.025;
   render();
 }
@@ -236,6 +236,7 @@ const main = () => {
   $('#SFB').css({'top': '80%', 'left':'25%'});
   $('.button_UP').on('mousedown', sfb_up);
   $('.button_DN').on('click', sfb_dn);
+  $('.button_UP').on('mouseout', missile_launch)
 
   $('body').on("keydown", (event) => {
     if ((event.code === "ArrowUp")){sfb_up()}
