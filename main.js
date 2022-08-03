@@ -263,7 +263,9 @@ const main = () => {
   $('.button_UP').on('mouseout', sfbUpButtonMouseOutRelease);  
   $('.button_UP').on('mouseup', sfbUpButtonMouseOutRelease);
   $('.button_UP').on('touchstart', sfbUpButtonMouseDown);
-  $('.button_UP').on('touchend', sfbUpButtonMouseOutRelease);  
+  $('.button_UP').on('touchend', sfbUpButtonMouseOutRelease); 
+  $('.container_game').on('touchstart', sfbUpButtonMouseDown);
+  $('.container_game').on('touchend', sfbUpButtonMouseOutRelease);  
 
 
   $('.button_DN').on('mousedown', sfbDwnButtonMouseDown);
