@@ -15,16 +15,26 @@
   </head>
   <body>
     <script type="module" src="/main.js"></script>
+      <audio id="bgMusic" loop>
+        <source src="./music/mixkit-kidding-around-9.mp3" type="audio/mp3">
+      </audio>
+      <audio id="gameOverMusic">
+        <source src="./music/mixkit-sad-game-over-trombone-471.wav" type="audio/wav">
+      </audio>
+      <audio id="missileLaunchMusic">
+        <source src="./music/mixkit-sci-fi-rocket-afterburner-1724.wav" type="audio/wav">
+      </audio>
     <h1><button id="startStop">START</button> Shooting Flappy Bird </h1>
     <div class="containerMain">
-      <div class="containerControls" flex="1">
+      <div class="containerControls">
         <button class="gameButton buttonUP btn-default"><strong>&#8593</strong></button>
         <button class="gameButton buttonMissile btn-default"><img class="button" src="./img/imgMissileIconButton_v2.png"></button>
         <button class="gameButton buttonDN btn-default">&#8595</button>
       </div>
       
-      <div class="containerGame" flex="2">
-        <div id="bird"><img class="imgBird" src="./img/flappyBirdParallel.png"></div>
+      <div class="containerGame">
+        <!-- <div id="bird"><img class="imgBird" src="./img/flappyBirdParallel.png"></div> -->
+        <div id="bird"></div>
         <div id="missile"></div>
         <h6 class="instruction">KEYBOARD INSTRUCTIONS:</h6>
         <ul class="instruction">
@@ -32,7 +42,7 @@
         <li>Right Arrow Key - Launch Missile</li>
         </ul>
       </div>
-      <div class="containerControls" flex="3">
+      <div class="containerControls">
         <button class="gameButton buttonUP btn-default">&#8593</button>
         <button class="gameButton buttonMissile btn-default"><img class="button" src="./img/imgMissileIconButton_v2.png"></button>
         <button class="gameButton buttonDN btn-default">&#8595</button>

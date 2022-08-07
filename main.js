@@ -3,10 +3,6 @@ import './style.css'
 import $ from "jquery";
 
 // Import Images - 
-import rockImg from "./img/rock5.png"
-import birdUpImg from "./img/flappyBirdUp.png"
-import birdDwnImg from "./img/flappyBirdDwn.png"
-import birdParallelImg from "./img/flappyBirdParallel.png"
 import missileInhibitImg from './img/imgMissileIconButtonInhibit.png'
 import missileActiveImg from './img/imgMissileIconButton_v2.png'
 
@@ -56,15 +52,24 @@ const render = () => {
 
   // Score display
   if (game.birdAlive) {
-    $('#scoreHolder').text("Score: "+ Math.round(game.score))
-    $('#scoreHolder').css("color","white")
-    $('#startStop').text("RESET")
+    $('#scoreHolder').text("Score: "+ Math.round(game.score));
+    $('#scoreHolder').css("color","white");
+    $('#startStop').text("RESET");
+    if (game.score < 0.1){
+      $('#bgMusic')[0].load();
+      $('#bgMusic')[0].play();
+      $('#bird').css("animation-iteration-count","infinite");
+    }
   } else {
     if (game.score > 0.1){
       $('#scoreHolder').text("Game Over! Final Score: "+ Math.round(game.score))
     }
     $('#scoreHolder').css("color","rgb(255,250,0)")
-    $('#startStop').text("START")
+    $('#startStop').text("START");
+    $('#bgMusic')[0].pause();
+    $('#gameOverMusic')[0].play();
+    $('#bird').css("animation-iteration-count","0");
+
   }
   
   // Rock display
@@ -72,20 +77,19 @@ const render = () => {
   let rPos = game.rockPos[0]
   for (rPos of game.rockPos){
       const $div = $('<div>').addClass('rock');
-      $div.append(($('<img>').addClass("imgRock")).attr("src",rockImg))
       $('.containerGame').append($div);
       $div.css({'left': ((rPos[0])+"%"), 'top':(rPos[1]+"%")})
   }
 
-  // bird display
+  // bird & Missile display
   $('#bird').css({'left': ((game.birdPos[0])+"%"), 'top':(game.birdPos[1]+"%")})
   $('#missile').css({'left': ((game.missilePosHt[0])+"%"), 'top':(game.missilePosHt[1]+"%"), 'height':(game.missilePosHt[2]+"%")})
-
-  // bird animation
-  if ((game.score*10)%10 < 2.5) {$(".imgBird").attr('src',birdUpImg)}
-  else if ((game.score*10)%10 < 5) {$(".imgBird").attr('src',birdParallelImg)}
-  else if ((game.score*10)%10 < 7.5) {$(".imgBird").attr('src',birdDwnImg)}
-  else {$(".imgBird").attr('src',birdParallelImg)}
+  if (game.missileActive){
+    $('#bgMusic')[0].pause();
+    $('#missileLaunchMusic')[0].play();
+  } else if (game.birdAlive & !(game.missileActive)) {
+    $('#bgMusic')[0].play();
+  }
 
   // Missile Inhibit time display
   let missileInhbitTime = Math.round((game.genMissileTimePeriod - game.genMissileTimeCount)/100)
@@ -234,7 +238,7 @@ const complexityInc = () => {
   game.genRockTimePeriod -= game.genRockTimePeriodDec;
 }
 
-// User Actions (Up, Down, Missile-Launch) --------------------------------------------------------
+//!User Actions (Up, Down, Missile-Launch) --------------------------------------------------------
 const birdMoveUp = () => {
   if (game.birdAlive === false) {return}
   if (game.birdPos[1]>0) {game.birdPos[1]-=game.birdUpDelta}
@@ -285,7 +289,6 @@ const main = () => {
   $('.buttonUP').on('touchend', birdUpButtonMouseOutRelease); 
   $('.containerGame').on('touchstart', birdUpButtonMouseDown);
   $('.containerGame').on('touchend', birdUpButtonMouseOutRelease);  
-
 
   $('.buttonDN').on('mousedown', birdDnButtonMouseDown);
   $('.buttonDN').on('mouseout', birdDnButtonMouseOutRelease);  

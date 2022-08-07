@@ -48,17 +48,32 @@ h1{
 }
 #bird {
   position: absolute;
-  background-color: rgba(0,0,0,0);
   width:5%;
+  height:10%;
   min-width: 40px;
   left: 25%;
+  background-image: url('/img/flappyBirdParallel.png');
+  background-size: 100% 100%;
+  animation-name: birdFlap;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes birdFlap {
+  0% {background-image: url('/img/flappyBirdParallel.png');}
+  25% {background-image: url('/img/flappyBirdUp.png'); }
+  50% {background-image: url('/img/flappyBirdParallel.png');}
+  75% {background-image: url('/img/flappyBirdDwn.png');}
+  100% {background-image: url('/img/flappyBirdParallel.png');}  
 }
 .rock {
   position: absolute;
-  width: 8%;
-  height: 16%;
+  width: 12%;
+  height: 24%;
   margin-top: 0px;
   margin-left: 0px;
+  background-image: url('/img/rock5.png');
+  background-size: 100% 100%;
 }
 .groundRock {
   position: absolute;
@@ -68,7 +83,7 @@ h1{
   bottom: 0%;
   margin-top: 0px;
   margin-left: 0px;
-  border:5px solid;
+  border:2px solid;
 }
 #missile {
   position: absolute;
