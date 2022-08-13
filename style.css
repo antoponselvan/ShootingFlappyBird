@@ -39,12 +39,18 @@ h1{
   border-width: 2px;
   border-style: solid;
   flex-direction: column;
+  
 }
 .gameButton {
   height: 28.3vh;
   font-size: xx-large;
   padding: 0px 0px;
   z-index: 1;
+}
+.buttonMissile{
+  background-image: url('./img/imgMissileIconButton_v2.png');
+  background-size: 100% 70%;
+  background-repeat: no-repeat; 
 }
 #bird {
   position: absolute;
@@ -162,3 +168,4 @@ li{
     height: 50%;
   }
 }
+/*  */

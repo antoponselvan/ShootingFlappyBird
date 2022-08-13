@@ -1,0 +1,7 @@
+Shooter Flapper Bird
+
+Short description :
+Navigate bird thru moving rocks. Bird can launch missile to destroy some rocks
+
+Full description :
+Bird falls at constant acceleration (simulating gravity) if there is no action from player. Player needs to keep bird afloat and avoid hitting rocks and boundaries. Player can launch missile to destroy some rocks 

@@ -11,7 +11,7 @@ const game = {};
 // Programmer Tuning Varaibles
 game.birdUpDelta = 4; // Bird position Inc with Up arrow use
 game.birdDnDelta = 4; // Bird position Dec with Down arrow use
-game.missileMoveRate = 0.5; // Rock speed (%screen / 0.01s)
+game.missileMoveRate = 0.5; // Missile speed (%screen / 0.01s)
 game.genMissileTimePeriod = 500; // Total count of 0.01s before Rock Generation
 game.rockMoveRateInc = 0.0001; // Complexity Increase - Rate of inc in rock speed (%screen / 0.01s)
 game.genRockTimePeriodDec = 0.02; // Complexity Increase - Rate of dec in rock gen time period (Count of 0.01s before new rock gen)
