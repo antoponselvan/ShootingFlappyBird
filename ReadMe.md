@@ -1,5 +1,7 @@
 # Shooting Flappy Bird
 
+[Link to Live Deployment](https://shooting-flappy-bird.vercel.app/)
+
 This is a improvised version of popular "Flappy Bird" game.
 
 Player navigates the bird thru multiple obstacles and at the same keep it afloat. The user will have options to launch straight missile to destroy obstacles
