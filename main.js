@@ -28,6 +28,9 @@ const Initialize = () => {
   game.score = 0;
   game.timePassed = 0;
   if (game.upButtonFn) {clearInterval(game.upButtonFn);}
+  // while (game.upButtonFn){
+  //   clearInterval(game.upButtonFn);
+  // }
   if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
 
   // Initialize position & status of items on game board (Rock, Missile, Bird)
@@ -44,6 +47,8 @@ const Initialize = () => {
   // Initialize Complexity Level
   game.rockMoveRate = 0.3; // Rock speed (%screen / 0.01s)
   game.genRockTimePeriod = 160; // Total count of 0.01s before Rock Generation
+
+  console.log("upbutton", game.upButtonFn)
 }
 
 
@@ -258,41 +263,47 @@ const missileLaunch = () => {
   game.genMissileTimeCount = 0;
   render();
 }
-const birdUpButtonMouseDown = () => {
-  if (game.birdAlive === false) {return}
-  game.upButtonFn = setInterval(birdMoveUp, 25*game.birdUpDelta);
-  if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
-}
-const birdUpButtonMouseOutRelease = () => {
-  if (game.birdAlive === false) {return}
-  if (game.upButtonFn) {clearInterval(game.upButtonFn);}
-}
-const birdDnButtonMouseDown = () => {
-  if (game.birdAlive === false) {return}
-  game.dwnButtonFn = setInterval(birdMoveDn, 25*game.birdDnDelta);
-  if (game.upButtonFn) {clearInterval(game.upButtonFn);}
-}
-const birdDnButtonMouseOutRelease = () => {
-  if (game.birdAlive === false) {return}
-  if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
-}
+// const birdUpButtonMouseDown = () => {
+//   if (game.birdAlive === false) {return}
+//   if (!game.upButtonFn) {game.upButtonFn = setInterval(birdMoveUp, 25*game.birdUpDelta);}
+//   if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
+//   console.log("upbutton",game.upButtonFn)
+// }
+// const birdUpButtonMouseOutRelease = () => {
+//   if (game.birdAlive === false) {return}
+//   if (game.upButtonFn) {clearInterval(game.upButtonFn);}
+// }
+// const birdDnButtonMouseDown = () => {
+//   if (game.birdAlive === false) {return}
+//   game.dwnButtonFn = setInterval(birdMoveDn, 25*game.birdDnDelta);
+//   if (game.upButtonFn) {clearInterval(game.upButtonFn);}
+// }
+// const birdDnButtonMouseOutRelease = () => {
+//   if (game.birdAlive === false) {return}
+//   if (game.dwnButtonFn) {clearInterval(game.dwnButtonFn);}
+// }
 
 
 
 // MAIN FUNCTION --------------------------------------------------
 const main = () => { 
   $('#bird').css({'top': '80%', 'left':'25%'});
-  $('.buttonUP').on('mousedown', birdUpButtonMouseDown);
-  $('.buttonUP').on('mouseout', birdUpButtonMouseOutRelease);  
-  $('.buttonUP').on('mouseup', birdUpButtonMouseOutRelease);
-  $('.buttonUP').on('touchstart', birdUpButtonMouseDown);
-  $('.buttonUP').on('touchend', birdUpButtonMouseOutRelease); 
-  $('.containerGame').on('touchstart', birdUpButtonMouseDown);
-  $('.containerGame').on('touchend', birdUpButtonMouseOutRelease);  
+  $('.buttonUP').on('mousedown', birdMoveUp);
+  // $('.buttonUP').on('mousedown', birdUpButtonMouseDown);
+  // $('.buttonUP').on('mouseout', birdUpButtonMouseOutRelease);  
+  // $('.buttonUP').on('mouseup', birdUpButtonMouseOutRelease);
+  $('.buttonUP').on('touchstart', birdMoveUp);
+  // $('.buttonUP').on('touchstart', birdUpButtonMouseDown);
+  // $('.buttonUP').on('touchend', birdUpButtonMouseOutRelease); 
+  // $('.containerGame').on('touchstart', birdUpButtonMouseDown);
+  // $('.containerGame').on('touchend', birdUpButtonMouseOutRelease);  
+  $('.containerGame').on('touchstart', birdMoveUp);
+  // $('.containerGame').on('touchend', birdUpButtonMouseOutRelease);  
 
-  $('.buttonDN').on('mousedown', birdDnButtonMouseDown);
-  $('.buttonDN').on('mouseout', birdDnButtonMouseOutRelease);  
-  $('.buttonDN').on('mouseup', birdDnButtonMouseOutRelease);
+  $('.buttonDN').on('mousedown', birdMoveDn);
+  // $('.buttonDN').on('mousedown', birdDnButtonMouseDown);
+  // $('.buttonDN').on('mouseout', birdDnButtonMouseOutRelease);  
+  // $('.buttonDN').on('mouseup', birdDnButtonMouseOutRelease);
   
   $('.buttonMissile').on('click', missileLaunch)
 
